@@ -1,23 +1,18 @@
-import prisma from "@/lib/prisma";
+import { Suspense } from "react";
+import HellosInfo from "./_components/hellos-info";
 
 export default async function HelloPage() {
-	const hellos = await prisma.hello.findMany({
-		orderBy: { createdAt: "desc" },
-	});
-
 	return (
 		<main>
-			{hellos.length === 0 && (
-				<h3 className="text-2xl font-bold">No hellos found.</h3>
-			)}
-
-			{hellos.length > 1 && (
-				<ul className="list-disc">
-					{hellos.map((h) => (
-						<li key={h.id}>{h.content}</li>
-					))}
-				</ul>
-			)}
+			<Suspense
+				fallback={
+					<h3 className="text-2xl font-bold">
+						Hello info is loading...
+					</h3>
+				}
+			>
+				<HellosInfo />
+			</Suspense>
 		</main>
 	);
 }
